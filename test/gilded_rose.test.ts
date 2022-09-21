@@ -1,5 +1,6 @@
-import { Shop, Item } from '../src/gilded_rose';
 import { describe, it, expect } from 'vitest';
+
+import { Shop, Item } from '../src/gilded_rose';
 
 describe('Gilded Rose', function () {
   it('should foo', function () {

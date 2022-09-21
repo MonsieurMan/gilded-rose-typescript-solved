@@ -25,5 +25,8 @@
   "homepage": "https://github.com/emilybache/GildedRose-Refactoring-Kata",
   "dependencies": {
     "vitest": "^0.23.4"
+  },
+  "devDependencies": {
+    "typescript": "^4.8.3"
   }
 }
