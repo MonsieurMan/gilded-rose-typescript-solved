@@ -34,22 +34,13 @@ export class Shop {
     );
 
     if (!isSpecialItem) {
-      if (item.quality > this.minQuality) {
-        if (item.sellIn > 0) {
-          item.quality--;
-        } else {
-          // Quality decrease faster after sellIn has passed
-          const newQuality = item.quality - 2;
-          // Quality can not go below zero
-          item.quality = Math.max(newQuality, 0);
-        }
-      }
-
-      item.sellIn--;
-
-      return;
+      this.updateNormalItem(item);
+    } else {
+      this.updateSpecialItem(item);
     }
+  }
 
+  private updateSpecialItem(item: Item) {
     if (
       (item.name == SpecialItem.AgedBrie ||
         item.name == SpecialItem.BackstagePasses) &&
@@ -76,5 +67,20 @@ export class Shop {
         item.quality = 0;
       }
     }
+  }
+
+  private updateNormalItem(item: Item) {
+    if (item.quality > this.minQuality) {
+      if (item.sellIn > 0) {
+        item.quality--;
+      } else {
+        // Quality decrease faster after sellIn has passed
+        const newQuality = item.quality - 2;
+        // Quality can not go below zero
+        item.quality = Math.max(newQuality, 0);
+      }
+    }
+
+    item.sellIn--;
   }
 }

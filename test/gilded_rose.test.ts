@@ -27,7 +27,10 @@ describe('Gilded Rose', function () {
 
     describe('Quality', () => {
       it('should decrease item quality overtime', () => {
-        expect(updateItem({ quality: 1 }).quality).to.eq(0);
+        expect(updateItem({ quality: 10, sellIn: 10 }).quality).to.eq(9);
+      });
+      it('should decrease item quality by two after sellIn date has passed', () => {
+        expect(updateItem({ quality: 2, sellIn: 0 }).quality).to.eq(0);
       });
       it('should not decrease quality below zero', () => {
         expect(updateItem({ quality: 0 }).quality).to.eq(0);
