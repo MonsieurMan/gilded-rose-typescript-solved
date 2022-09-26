@@ -7,21 +7,28 @@ import { SpecialItem } from '../special_items';
 function updateItem({
   quality = 0,
   sellIn = 0,
-  name = SpecialItem.AgedBrie,
+  name = `Conjured fried eggs`,
 }): Item {
-  // FIXME: Dependency upon the factory for each decorator test is not good
   const item = ItemFactory.createItem({ name, sellIn, quality });
 
   return item.update();
 }
 
-describe('Aged Brie', () => {
-  it('should increase Aged Brie quality', () => {
+describe('Conjured item', () => {
+  it('should decrease quality twice as fast', () => {
     expect(
       updateItem({
-        quality: 1,
+        quality: 10,
         sellIn: 1,
       }).quality
-    ).to.eq(2);
+    ).to.eq(8);
+  });
+  it('should decrease quality twice as fast', () => {
+    expect(
+      updateItem({
+        quality: 10,
+        sellIn: 0,
+      }).quality
+    ).to.eq(6);
   });
 });

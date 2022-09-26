@@ -1,29 +1,16 @@
-export interface Item {
-  name: string;
-  sellIn: number;
-  quality: number;
-  update(): Item;
-}
+import { ItemBase } from '../item';
+import { ItemDecorator } from '../item_decorator';
 
-export class ItemBase implements Item {
-  public static minQuality = 0;
-  public static maxQuality = 50;
-
-  constructor(
-    public name: string,
-    public sellIn: number,
-    public quality: number
-  ) {}
-
-  update() {
+export class ConjuredItemDecorator extends ItemDecorator {
+  override update() {
     if (this.quality > ItemBase.minQuality) {
       if (this.sellIn > 0) {
         // FIXME: Hardcoded quality drop rate value
-        this.quality--;
+        this.quality -= 2;
       } else {
         // Quality decrease faster after sellIn has passed
         // FIXME: Hardcoded quality drop rate value
-        const newQuality = this.quality - 2;
+        const newQuality = this.quality - 4;
         // Quality can not go below zero
         this.quality = Math.max(newQuality, 0);
       }

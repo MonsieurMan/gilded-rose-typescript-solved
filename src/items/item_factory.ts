@@ -3,6 +3,7 @@ import { AgedBrieItemDecorator } from './decorators/aged_brie_item_decorator';
 import { BackstagePassesItemDecorator } from './decorators/backstage_passes_item_decorator';
 import { SulfurasItemDecorator } from './decorators/sulfuras_item_decorator';
 import { Item, ItemBase } from './item';
+import { ConjuredItemDecorator } from './decorators/conjured_item_decorator';
 
 type ItemInputBase = Omit<Item, 'update' | 'name'>;
 
@@ -22,6 +23,10 @@ export class ItemFactory {
   // if programmers want to use/test their special behaviors
   static createItem(item: ItemFactoryInput | SpecialItemFactoryInput): Item {
     const itemBase = new ItemBase(item.name, item.sellIn, item.quality);
+
+    if (item.name.match(/^conjured .*/i)) {
+      return new ConjuredItemDecorator(itemBase);
+    }
 
     switch (item.name) {
       case SpecialItem.AgedBrie:
