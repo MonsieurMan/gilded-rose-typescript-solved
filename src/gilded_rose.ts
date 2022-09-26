@@ -29,6 +29,27 @@ export class Shop {
   }
 
   private updateItemQuality(item: Item) {
+    const isSpecialItem = Object.values(SpecialItem).includes(
+      item.name as SpecialItem
+    );
+
+    if (!isSpecialItem) {
+      if (item.quality > this.minQuality) {
+        if (item.sellIn > 0) {
+          item.quality--;
+        } else {
+          // Quality decrease faster after sellIn has passed
+          const newQuality = item.quality - 2;
+          // Quality can not go below zero
+          item.quality = Math.max(newQuality, 0);
+        }
+      }
+
+      item.sellIn--;
+
+      return;
+    }
+
     if (
       (item.name == SpecialItem.AgedBrie ||
         item.name == SpecialItem.BackstagePasses) &&
@@ -44,10 +65,6 @@ export class Shop {
           item.quality += 1;
         }
       }
-    } else if (item.quality < this.maxQuality && item.quality > 0) {
-      if (item.name != SpecialItem.Sulfuras) {
-        item.quality -= 1;
-      }
     }
 
     if (item.name != SpecialItem.Sulfuras) {
@@ -55,15 +72,8 @@ export class Shop {
     }
 
     if (item.sellIn < 0) {
-      if (item.name == SpecialItem.AgedBrie && item.quality < this.maxQuality) {
-        item.quality += 1;
-      } else if (item.name === SpecialItem.BackstagePasses) {
+      if (item.name === SpecialItem.BackstagePasses) {
         item.quality = 0;
-      } else if (
-        item.quality > this.minQuality &&
-        item.name != SpecialItem.Sulfuras
-      ) {
-        item.quality -= 1;
       }
     }
   }
