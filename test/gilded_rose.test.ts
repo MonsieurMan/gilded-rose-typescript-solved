@@ -1,9 +1,15 @@
 import { describe, it, expect } from 'vitest';
 
-import { Shop, Item } from '../src/gilded_rose';
+import { Shop } from '../src/gilded_rose';
+import {
+  ItemBase,
+  Item,
+  ItemFactory,
+  AgedBrieItemDecorator,
+} from '../src/item';
 
 function updateItem({ quality = 0, sellIn = 0, name = 'test-item' }): Item {
-  const item = new Item(name, sellIn, quality);
+  const item = ItemFactory.createItem({ name, sellIn, quality });
   const shop = new Shop([item]);
   const updatedItem = shop.updateAllItems()[0];
   if (!updatedItem) {
@@ -15,8 +21,35 @@ function updateItem({ quality = 0, sellIn = 0, name = 'test-item' }): Item {
 describe('Gilded Rose', function () {
   describe('Item', () => {
     it('should have the given name', function () {
-      const item = new Item('foo', 0, 0);
+      const item = new ItemBase('foo', 0, 0);
       expect(item.name).toBe('foo');
+    });
+  });
+
+  describe('Item factory', () => {
+    it('should return an item base for a normal name', () => {
+      const item = ItemFactory.createItem({
+        name: 'foo',
+        sellIn: 1,
+        quality: 1,
+      });
+      expect(item).to.be.instanceOf(ItemBase);
+    });
+    it('should return an AgedBrie for name `Aged Brie`', () => {
+      const item = ItemFactory.createItem({
+        name: 'Aged Brie',
+        sellIn: 1,
+        quality: 1,
+      });
+      expect(item).to.be.instanceOf(AgedBrieItemDecorator);
+    });
+    it.skip('should return an BackstagePasses for name `Backstage passes to a TAFKAL80ETC concert`', () => {
+      const item = ItemFactory.createItem({
+        name: 'Backstage passes to a TAFKAL80ETC concert',
+        sellIn: 1,
+        quality: 1,
+      });
+      // expect(item).to.be.instanceOf(BackstagePassesItemDecorator);
     });
   });
 

@@ -1,31 +1,6 @@
-export class Item {
-  static minQuality = 0;
-  static maxQuality = 50;
-
-  constructor(
-    public name: string,
-    public sellIn: number,
-    public quality: number
-  ) {}
-
-  update() {
-    if (this.quality > Item.minQuality) {
-      if (this.sellIn > 0) {
-        this.quality--;
-      } else {
-        // Quality decrease faster after sellIn has passed
-        const newQuality = this.quality - 2;
-        // Quality can not go below zero
-        this.quality = Math.max(newQuality, 0);
-      }
-    }
-
-    this.sellIn--;
-  }
-}
+import { Item, ItemBase } from './item';
 
 export enum SpecialItem {
-  AgedBrie = 'Aged Brie',
   BackstagePasses = 'Backstage passes to a TAFKAL80ETC concert',
   Sulfuras = 'Sulfuras, Hand of Ragnaros',
 }
@@ -57,17 +32,16 @@ export class Shop {
 
   private updateSpecialItem(item: Item) {
     if (
-      (item.name == SpecialItem.AgedBrie ||
-        item.name == SpecialItem.BackstagePasses) &&
-      item.quality < Item.maxQuality
+      item.name == SpecialItem.BackstagePasses &&
+      item.quality < ItemBase.maxQuality
     ) {
       item.quality += 1;
 
       if (item.name == SpecialItem.BackstagePasses) {
-        if (item.sellIn < 11 && item.quality < Item.maxQuality) {
+        if (item.sellIn < 11 && item.quality < ItemBase.maxQuality) {
           item.quality += 1;
         }
-        if (item.sellIn < 6 && item.quality < Item.maxQuality) {
+        if (item.sellIn < 6 && item.quality < ItemBase.maxQuality) {
           item.quality += 1;
         }
       }
