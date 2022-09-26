@@ -6,6 +6,7 @@ import {
   Item,
   ItemFactory,
   AgedBrieItemDecorator,
+  BackstagePassesItemDecorator,
 } from '../src/item';
 
 function updateItem({ quality = 0, sellIn = 0, name = 'test-item' }): Item {
@@ -43,13 +44,13 @@ describe('Gilded Rose', function () {
       });
       expect(item).to.be.instanceOf(AgedBrieItemDecorator);
     });
-    it.skip('should return an BackstagePasses for name `Backstage passes to a TAFKAL80ETC concert`', () => {
+    it('should return an BackstagePasses for name `Backstage passes to a TAFKAL80ETC concert`', () => {
       const item = ItemFactory.createItem({
         name: 'Backstage passes to a TAFKAL80ETC concert',
         sellIn: 1,
         quality: 1,
       });
-      // expect(item).to.be.instanceOf(BackstagePassesItemDecorator);
+      expect(item).to.be.instanceOf(BackstagePassesItemDecorator);
     });
   });
 

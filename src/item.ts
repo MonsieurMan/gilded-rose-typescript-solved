@@ -38,11 +38,20 @@ export abstract class ItemDecorator implements Item {
   get name() {
     return this.item.name;
   }
+  set name(value: string) {
+    this.item.name = value;
+  }
   get sellIn() {
     return this.item.sellIn;
   }
+  set sellIn(value: number) {
+    this.item.sellIn = value;
+  }
   get quality() {
     return this.item.quality;
+  }
+  set quality(value: number) {
+    this.item.quality = value;
   }
   update(): Item {
     return this.item.update();
@@ -59,7 +68,21 @@ export class AgedBrieItemDecorator extends ItemDecorator {
   }
 }
 
-// export class BackstagePassesItemDecorator extends ItemDecorator {}
+export class BackstagePassesItemDecorator extends ItemDecorator {
+  override update(): Item {
+    this.sellIn--;
+    if (this.sellIn <= 0) {
+      this.quality = 0;
+    } else if (this.sellIn <= 5) {
+      this.quality += 3;
+    } else if (this.sellIn <= 10) {
+      this.quality += 2;
+    } else {
+      this.quality++;
+    }
+    return this;
+  }
+}
 
 export class ItemFactory {
   // This factory has the interest of keeping the same interface.
@@ -73,8 +96,8 @@ export class ItemFactory {
     switch (item.name) {
       case 'Aged Brie':
         return new AgedBrieItemDecorator(itemBase);
-      // case 'Backstage passes to a TAFKAL80ETC concert':
-      //   return new BackstagePassesItemDecorator(itemBase);
+      case 'Backstage passes to a TAFKAL80ETC concert':
+        return new BackstagePassesItemDecorator(itemBase);
       default:
         return itemBase;
     }
