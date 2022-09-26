@@ -1,9 +1,27 @@
 export class Item {
+  static minQuality = 0;
+  static maxQuality = 50;
+
   constructor(
     public name: string,
     public sellIn: number,
     public quality: number
   ) {}
+
+  update() {
+    if (this.quality > Item.minQuality) {
+      if (this.sellIn > 0) {
+        this.quality--;
+      } else {
+        // Quality decrease faster after sellIn has passed
+        const newQuality = this.quality - 2;
+        // Quality can not go below zero
+        this.quality = Math.max(newQuality, 0);
+      }
+    }
+
+    this.sellIn--;
+  }
 }
 
 export enum SpecialItem {
@@ -13,14 +31,11 @@ export enum SpecialItem {
 }
 
 export class Shop {
-  maxQuality = 50;
-  minQuality = 0;
-
   constructor(private items: Item[] = []) {
     this.items = items;
   }
 
-  updateAllItems() {
+  public updateAllItems(): Item[] {
     for (const item of this.items) {
       this.updateItemQuality(item);
     }
@@ -34,7 +49,7 @@ export class Shop {
     );
 
     if (!isSpecialItem) {
-      this.updateNormalItem(item);
+      item.update();
     } else {
       this.updateSpecialItem(item);
     }
@@ -44,15 +59,15 @@ export class Shop {
     if (
       (item.name == SpecialItem.AgedBrie ||
         item.name == SpecialItem.BackstagePasses) &&
-      item.quality < this.maxQuality
+      item.quality < Item.maxQuality
     ) {
       item.quality += 1;
 
       if (item.name == SpecialItem.BackstagePasses) {
-        if (item.sellIn < 11 && item.quality < this.maxQuality) {
+        if (item.sellIn < 11 && item.quality < Item.maxQuality) {
           item.quality += 1;
         }
-        if (item.sellIn < 6 && item.quality < this.maxQuality) {
+        if (item.sellIn < 6 && item.quality < Item.maxQuality) {
           item.quality += 1;
         }
       }
@@ -67,20 +82,5 @@ export class Shop {
         item.quality = 0;
       }
     }
-  }
-
-  private updateNormalItem(item: Item) {
-    if (item.quality > this.minQuality) {
-      if (item.sellIn > 0) {
-        item.quality--;
-      } else {
-        // Quality decrease faster after sellIn has passed
-        const newQuality = item.quality - 2;
-        // Quality can not go below zero
-        item.quality = Math.max(newQuality, 0);
-      }
-    }
-
-    item.sellIn--;
   }
 }
