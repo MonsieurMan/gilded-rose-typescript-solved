@@ -1,15 +1,12 @@
 import { describe, it, expect } from 'vitest';
 
-import { Shop } from '../src/gilded_rose';
-import {
-  ItemBase,
-  Item,
-  ItemFactory,
-  AgedBrieItemDecorator,
-  BackstagePassesItemDecorator,
-  SpecialItem,
-  SulfurasItemDecorator,
-} from '../src/item';
+import { Shop } from '../gilded_rose';
+import { ItemBase, Item } from './item';
+import { ItemFactory } from './item_factory';
+import { AgedBrieItemDecorator } from './decorators/aged_brie_item_decorator';
+import { BackstagePassesItemDecorator } from './decorators/backstage_passes_item_decorator';
+import { SulfurasItemDecorator } from './decorators/sulfuras_item_decorator';
+import { SpecialItem } from './special_items';
 
 function updateItem({ quality = 0, sellIn = 0, name = 'test-item' }): Item {
   const item = ItemFactory.createItem({ name, sellIn, quality });
