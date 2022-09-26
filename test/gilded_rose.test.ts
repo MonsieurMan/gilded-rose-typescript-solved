@@ -21,8 +21,12 @@ describe('Gilded Rose', function () {
   });
 
   describe('Shop', () => {
+    it('should decrease sellIn overtime', () => {
+      expect(updateItem({ sellIn: 1 }).sellIn).to.eq(0);
+    });
+
     describe('Quality', () => {
-      it('should decrease item quality', () => {
+      it('should decrease item quality overtime', () => {
         expect(updateItem({ quality: 1 }).quality).to.eq(0);
       });
       it('should not decrease quality below zero', () => {
@@ -95,12 +99,6 @@ describe('Gilded Rose', function () {
             }).quality
           ).to.eq(0);
         });
-      });
-    });
-
-    describe('SellIn', () => {
-      it('should decrease sellIn', () => {
-        expect(updateItem({ sellIn: 1 }).sellIn).to.eq(0);
       });
     });
   });
