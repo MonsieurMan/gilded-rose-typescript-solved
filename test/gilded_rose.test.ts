@@ -7,6 +7,8 @@ import {
   ItemFactory,
   AgedBrieItemDecorator,
   BackstagePassesItemDecorator,
+  SpecialItem,
+  SulfurasItemDecorator,
 } from '../src/item';
 
 function updateItem({ quality = 0, sellIn = 0, name = 'test-item' }): Item {
@@ -36,21 +38,29 @@ describe('Gilded Rose', function () {
       });
       expect(item).to.be.instanceOf(ItemBase);
     });
-    it('should return an AgedBrie for name `Aged Brie`', () => {
+    it(`should return an AgedBrie for name ${SpecialItem.AgedBrie}`, () => {
       const item = ItemFactory.createItem({
-        name: 'Aged Brie',
+        name: SpecialItem.AgedBrie,
         sellIn: 1,
         quality: 1,
       });
       expect(item).to.be.instanceOf(AgedBrieItemDecorator);
     });
-    it('should return an BackstagePasses for name `Backstage passes to a TAFKAL80ETC concert`', () => {
+    it(`should return an BackstagePasses for name ${SpecialItem.BackstagePasses}`, () => {
       const item = ItemFactory.createItem({
-        name: 'Backstage passes to a TAFKAL80ETC concert',
+        name: SpecialItem.BackstagePasses,
         sellIn: 1,
         quality: 1,
       });
       expect(item).to.be.instanceOf(BackstagePassesItemDecorator);
+    });
+    it(`should return an Sulfuras for name ${SpecialItem.Sulfuras}`, () => {
+      const item = ItemFactory.createItem({
+        name: SpecialItem.Sulfuras,
+        sellIn: 1,
+        quality: 1,
+      });
+      expect(item).to.be.instanceOf(SulfurasItemDecorator);
     });
   });
 
@@ -74,7 +84,8 @@ describe('Gilded Rose', function () {
       });
       it('should not increase above 50', () => {
         expect(
-          updateItem({ quality: 50, sellIn: 1, name: 'Aged Brie' }).quality
+          updateItem({ quality: 50, sellIn: 1, name: SpecialItem.AgedBrie })
+            .quality
         ).to.eq(50);
       });
     });
@@ -85,27 +96,35 @@ describe('Gilded Rose', function () {
           updateItem({
             quality: 1,
             sellIn: 1,
-            name: 'Aged Brie',
+            name: SpecialItem.AgedBrie,
           }).quality
         ).to.eq(2);
       });
       it('should not decrease Sulfuras quality', () => {
         expect(
           updateItem({
-            quality: 50,
+            quality: 80,
             sellIn: 1,
-            name: 'Sulfuras, Hand of Ragnaros',
+            name: SpecialItem.Sulfuras,
           }).quality
-        ).to.eq(50);
+        ).to.eq(80);
+      });
+      it('should not decrease Sulfuras sellIn', () => {
+        expect(
+          updateItem({
+            quality: 80,
+            sellIn: 1,
+            name: SpecialItem.Sulfuras,
+          }).sellIn
+        ).to.eq(1);
       });
       describe('Backstage passes', () => {
-        const backstagePasses = `Backstage passes to a TAFKAL80ETC concert`;
         it('should increase quality overtime', () => {
           expect(
             updateItem({
               quality: 0,
               sellIn: 20,
-              name: backstagePasses,
+              name: SpecialItem.BackstagePasses,
             }).quality
           ).to.eq(1);
         });
@@ -114,7 +133,7 @@ describe('Gilded Rose', function () {
             updateItem({
               quality: 0,
               sellIn: 10,
-              name: backstagePasses,
+              name: SpecialItem.BackstagePasses,
             }).quality
           ).to.eq(2);
         });
@@ -123,7 +142,7 @@ describe('Gilded Rose', function () {
             updateItem({
               quality: 0,
               sellIn: 5,
-              name: backstagePasses,
+              name: SpecialItem.BackstagePasses,
             }).quality
           ).to.eq(3);
         });
@@ -132,7 +151,7 @@ describe('Gilded Rose', function () {
             updateItem({
               quality: 10,
               sellIn: 0,
-              name: backstagePasses,
+              name: SpecialItem.BackstagePasses,
             }).quality
           ).to.eq(0);
         });

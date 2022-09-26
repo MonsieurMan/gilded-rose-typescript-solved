@@ -7,9 +7,7 @@ export class Shop {
 
   public updateAllItems(): Item[] {
     for (const item of this.items) {
-      if (item.name !== 'Sulfuras, Hand of Ragnaros') {
-        item.update();
-      }
+      item.update();
     }
 
     return this.items;

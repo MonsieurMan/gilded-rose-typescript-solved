@@ -84,20 +84,47 @@ export class BackstagePassesItemDecorator extends ItemDecorator {
   }
 }
 
+export class SulfurasItemDecorator extends ItemDecorator {
+  override get quality() {
+    return 80;
+  }
+  override update(): Item {
+    return this;
+  }
+}
+
+export enum SpecialItem {
+  AgedBrie = 'Aged Brie',
+  BackstagePasses = 'Backstage passes to a TAFKAL80ETC concert',
+  Sulfuras = 'Sulfuras, Hand of Ragnaros',
+}
+
+type ItemInputBase = Omit<Item, 'update' | 'name'>;
+
+type SpecialItemFactoryInput = ItemInputBase & {
+  name: SpecialItem;
+};
+
+type ItemFactoryInput = ItemInputBase & {
+  name: string;
+};
+
 export class ItemFactory {
   // This factory has the interest of keeping the same interface.
   // Creating special objects only given their name that is.
   // ---
   // FIXME: It creates stringly typed behaviors, which are bad
   // if programmers want to use/test their special behaviors
-  static createItem(item: Omit<Item, 'update'>): Item {
+  static createItem(item: ItemFactoryInput | SpecialItemFactoryInput): Item {
     const itemBase = new ItemBase(item.name, item.sellIn, item.quality);
 
     switch (item.name) {
-      case 'Aged Brie':
+      case SpecialItem.AgedBrie:
         return new AgedBrieItemDecorator(itemBase);
-      case 'Backstage passes to a TAFKAL80ETC concert':
+      case SpecialItem.BackstagePasses:
         return new BackstagePassesItemDecorator(itemBase);
+      case SpecialItem.Sulfuras:
+        return new SulfurasItemDecorator(itemBase);
       default:
         return itemBase;
     }
